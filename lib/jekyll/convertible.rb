@@ -77,6 +77,9 @@ module Jekyll
       payload["pygments_prefix"] = converter.pygments_prefix
       payload["pygments_suffix"] = converter.pygments_suffix
 
+      # Protect fenced code blocks by marking them as raw content.
+      self.content.gsub!(/^(```.*?^```)$/m, "{% raw %}\n\\1\n{% endraw %}")
+
       begin
         self.content = Liquid::Template.parse(self.content).render!(payload, info)
       rescue => e
